@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DisneyHeroHub"
+rootProject.name = "DisneyHeroHub3"
 include(":app")
  
