@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">DisneyHeroHub</string>
+    <string name="app_name">DisneyHeroHub3</string>
+    <string name="favorite">Favorite</string>
+    <string name="all">All</string>
+    <string name="films">Films</string>
+    <string name="short_films">Short Films</string>
+    <string name="tv_shows">TV Shows</string>
+    <string name="video_games">Video Games</string>
+    <string name="reload">Reload</string>
 </resources>
