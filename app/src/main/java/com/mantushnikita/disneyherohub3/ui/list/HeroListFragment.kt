@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mantushnikita.disneyherohub3.R
 import com.mantushnikita.disneyherohub3.databinding.FragmentHeroListBinding
@@ -39,12 +40,10 @@ class HeroListFragment : Fragment() {
                     binding?.progressView?.visibility = View.VISIBLE
 
                 }
-
                 is HeroListState.HeroListLoaded -> {
                     binding?.progressView?.visibility = View.GONE
                     setList(state.heroList)
                 }
-
                 is HeroListState.Error -> {
                     binding?.progressView?.visibility = View.GONE
                     Toast.makeText(requireContext(), state.error, Toast.LENGTH_LONG).show()
@@ -59,12 +58,7 @@ class HeroListFragment : Fragment() {
             if (adapter == null) {
                 layoutManager = GridLayoutManager(requireContext(), 2)
                 adapter = HeroListAdapter { heroId ->
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.container, HeroFragment().apply {
-                            arguments = bundleOf("id" to heroId)
-                        })
-                        .addToBackStack(null)
-                        .commit()
+                    findNavController().navigate(HeroListFragmentDirections.actionHeroListFragmentToHeroFragment(heroId))
                 }
             }
             (adapter as? HeroListAdapter)?.submitList(list)

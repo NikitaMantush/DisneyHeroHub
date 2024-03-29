@@ -4,4 +4,10 @@
     <color name="button_color">#4E2667</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="banner_red">#e3c0bc</color>
+    <color name="banner_red_text">#953133</color>
+    <color name="banner_green">#d6ecce</color>
+    <color name="banner_green_text">#53694c</color>
+    <color name="banner_blue">#c4e0eb</color>
+
 </resources>
