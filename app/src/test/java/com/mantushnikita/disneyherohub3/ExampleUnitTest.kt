@@ -1,4 +1,4 @@
-package com.mantushnikita.disneyherohub
+package com.mantushnikita.disneyherohub3
 
 import org.junit.Test
 
