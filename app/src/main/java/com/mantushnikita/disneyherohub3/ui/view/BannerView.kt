@@ -75,15 +75,15 @@ class BannerView(
     }
 
     private fun show() {
-        val fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+        val slideInAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_bottom)
         visibility = View.VISIBLE
-        startAnimation(fadeInAnimation)
+        startAnimation(slideInAnimation)
     }
 
     private fun hide() {
         if (visibility == View.VISIBLE) {
-            val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-            fadeOutAnimation.setAnimationListener(object : Animation.AnimationListener {
+            val slideOutAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out_to_top)
+            slideOutAnimation.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation) {}
 
                 override fun onAnimationEnd(animation: Animation) {
@@ -92,7 +92,7 @@ class BannerView(
 
                 override fun onAnimationRepeat(animation: Animation) {}
             })
-            startAnimation(fadeOutAnimation)
+            startAnimation(slideOutAnimation)
         }
     }
 
