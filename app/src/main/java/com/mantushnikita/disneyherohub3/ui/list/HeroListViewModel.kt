@@ -19,7 +19,7 @@ class HeroListViewModel @Inject constructor(
     fun processAction(action: HeroListAction) {
         when (action) {
             is HeroListAction.Init -> {
-                loadListHeroes()
+                    loadListHeroes()
             }
         }
     }

@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.mantushnikita.disneyherohub3.R
 import com.mantushnikita.disneyherohub3.databinding.FragmentHeroBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +30,7 @@ class HeroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         arguments?.getInt("id")?.let { heroId ->
             viewModel.processAction(HeroAction.LoadById(heroId))
         }
@@ -41,6 +42,13 @@ class HeroFragment : Fragment() {
                 }
 
                 is HeroState.HeroLoaded -> {
+                    binding?.bannerViewHeroFragment?.showBanner(
+                        "Success",
+                        "Hero is loaded",
+                        R.drawable.ic_success,
+                        R.drawable.shape_border_green,
+                        R.color.banner_green_text
+                    )
                     binding?.progressView?.visibility = View.GONE
                     binding?.run {
                         heroImageView.run {
@@ -68,8 +76,14 @@ class HeroFragment : Fragment() {
                 }
 
                 is HeroState.Error -> {
+                    binding?.bannerViewHeroFragment?.showBanner(
+                        "Error",
+                        state.error,
+                        R.drawable.shape_border_green,
+                        R.drawable.ic_error,
+                        R.color.banner_red_text
+                    )
                     binding?.progressView?.visibility = View.GONE
-                    Toast.makeText(requireContext(), state.error, Toast.LENGTH_LONG).show()
                 }
             }
         }
