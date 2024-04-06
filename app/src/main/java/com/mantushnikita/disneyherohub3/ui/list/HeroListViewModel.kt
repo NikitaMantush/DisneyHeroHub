@@ -4,13 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mantushnikita.disneyherohub3.repository.HeroRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class HeroListViewModel @Inject constructor(
+
+class HeroListViewModel(
     private val repository: HeroRepository
 ) : ViewModel() {
 
@@ -19,7 +18,7 @@ class HeroListViewModel @Inject constructor(
     fun processAction(action: HeroListAction) {
         when (action) {
             is HeroListAction.Init -> {
-                loadListHeroes()
+                    loadListHeroes()
             }
         }
     }
