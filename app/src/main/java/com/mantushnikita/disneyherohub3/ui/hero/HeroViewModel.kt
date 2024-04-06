@@ -5,13 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mantushnikita.disneyherohub3.repository.HeroRepository
 import com.mantushnikita.disneyherohub3.util.toHero
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class HeroViewModel @Inject constructor(
+
+class HeroViewModel(
     private val repository: HeroRepository
 ) : ViewModel() {
 
