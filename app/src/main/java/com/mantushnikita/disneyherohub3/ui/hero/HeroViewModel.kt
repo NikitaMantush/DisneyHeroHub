@@ -3,19 +3,19 @@ package com.mantushnikita.disneyherohub3.ui.hero
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mantushnikita.disneyherohub3.repository.HeroRepository
-import com.mantushnikita.disneyherohub3.util.toHero
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.mantushnikita.disneyherohub3.usecase.HeroResponses
+import com.mantushnikita.disneyherohub3.usecase.LoadHeroUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class HeroViewModel @Inject constructor(
-    private val repository: HeroRepository
+
+class HeroViewModel(
+    private val loadHeroUseCase: LoadHeroUseCase
 ) : ViewModel() {
 
-    val state = MutableLiveData<HeroState>()
+    val state = MutableStateFlow<HeroState>(HeroState.Loading)
     private var currentId: Int? = null
 
 
@@ -33,20 +33,45 @@ class HeroViewModel @Inject constructor(
         }
     }
 
+//    @SuppressLint("CheckResult")
+//    private fun getHeroById(id: Int) {
+//        state.value = HeroState.Loading
+//        repository.getHeroById(id)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(
+//                { response ->
+//                    if (response.isSuccessful) {
+//                        val hero = response.body()?.data?.toHero()
+//                        if (hero != null) {
+//                            state.value = HeroState.HeroLoaded(hero)
+//                            currentId = id
+//                        } else {
+//                            state.value = HeroState.Error("Hero not found")
+//                        }
+//                    }
+//                },
+//                {
+//                    state.value = HeroState.Error("Network Error")
+//                }
+//            )
+//    }
+
     private fun getHeroById(id: Int) {
         state.value = HeroState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getHeroById(id)
-            if (response.isSuccessful) {
-                val hero = response.body()?.data?.toHero()
-                if (hero != null) {
-                    state.postValue(HeroState.HeroLoaded(hero))
-                    currentId = id
-                } else {
-                    state.postValue(HeroState.Error("Hero not found"))
+            loadHeroUseCase.getHeroById(id).collectLatest { result ->
+                when {
+                    result is HeroResponses.Success -> {
+                        state.emit(
+                            HeroState.HeroLoaded(result.hero)
+                        )
+                        currentId = id
+                    }
+                    result is HeroResponses.Error -> {
+
+                    }
                 }
-            } else {
-                state.postValue(HeroState.Error("Network Error"))
             }
         }
     }

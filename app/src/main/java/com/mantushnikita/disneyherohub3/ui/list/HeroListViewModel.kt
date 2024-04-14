@@ -3,18 +3,19 @@ package com.mantushnikita.disneyherohub3.ui.list
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mantushnikita.disneyherohub3.repository.HeroRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.mantushnikita.disneyherohub3.usecase.HeroListResponses
+import com.mantushnikita.disneyherohub3.usecase.LoadHeroListUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class HeroListViewModel @Inject constructor(
-    private val repository: HeroRepository
+
+class HeroListViewModel(
+    private val loadHeroListUseCase: LoadHeroListUseCase
 ) : ViewModel() {
 
-    val state = MutableLiveData<HeroListState>()
+    val state = MutableStateFlow<HeroListState>(HeroListState.Loading)
 
     fun processAction(action: HeroListAction) {
         when (action) {
@@ -27,16 +28,19 @@ class HeroListViewModel @Inject constructor(
     private fun loadListHeroes() {
         state.value = HeroListState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getHeroes()
-            if (response.isSuccessful) {
-                val heroList = response.body()?.data
-                if (heroList != null) {
-                    state.postValue(HeroListState.HeroListLoaded(heroList))
-                } else {
-                    state.postValue(HeroListState.Error("Hero list not found"))
+            loadHeroListUseCase.getHeroes().collectLatest { result ->
+                when {
+                    result is HeroListResponses.Success -> {
+                        state.emit(
+                            HeroListState.HeroListLoaded(result.heroList)
+                        )
+                    }
+                    result is HeroListResponses.Error -> {
+                        state.emit(
+                            HeroListState.Error("Hero list not found")
+                        )
+                    }
                 }
-            } else {
-                state.postValue(HeroListState.Error("Network Error"))
             }
         }
     }
