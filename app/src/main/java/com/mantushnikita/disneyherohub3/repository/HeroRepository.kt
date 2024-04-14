@@ -6,7 +6,7 @@ import javax.inject.Inject
 class HeroRepository @Inject constructor(
     private val api: Api
 ) {
-    suspend fun getHeroes() = api.getHeroes()
+    fun getHeroes() = api.getHeroes()
 
-    suspend fun getHeroById(id: Int) = api.getHeroById(id)
+    fun getHeroById(id: Int) = api.getHeroById(id)
 }
